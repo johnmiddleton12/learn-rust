@@ -18,6 +18,10 @@ document.getElementById("pause-button").onclick = function () {
     document.getElementById("pause-button").innerText = isPaused ? "Resume" : "Pause";
 };
 
+document.getElementById("clear-button").onclick = function () {
+    universe.clear();
+};
+
 canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
 
