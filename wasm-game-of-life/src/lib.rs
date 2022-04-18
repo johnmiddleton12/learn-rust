@@ -29,8 +29,6 @@ impl fmt::Display for Universe {
     }
 }
 
-
-
 #[wasm_bindgen]
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -108,7 +106,7 @@ impl Universe {
         let height = 128;
 
         let cells = (0..width * height)
-            .map(|i| {
+            .map(|_i| {
                 if get_random_bool() == 1 {
                     Cell::Alive
                 } else {
@@ -122,6 +120,16 @@ impl Universe {
             height,
             cells,
         }
+
+    }
+
+    pub fn clear(&mut self) {
+
+        self.cells = (0..self.width * self.height)
+            .map(|_i| {
+                Cell::Dead
+            })
+            .collect();
 
     }
 

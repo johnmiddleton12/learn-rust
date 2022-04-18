@@ -11,6 +11,9 @@ const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
 const canvas = document.getElementById("game-of-life-canvas");
+
+document.getElementById("clear-button").onclick = universe.clear;
+
 canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
 
