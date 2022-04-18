@@ -2,11 +2,18 @@ mod utils;
 use std::fmt;
 use wasm_bindgen::prelude::*;
 
+extern crate js_sys;
+
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+fn get_random_bool () -> i32 {
+    let a = js_sys::Math::random() * 2.0;
+    js_sys::Math::floor(a) as i32
+}
 
 impl fmt::Display for Universe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -21,6 +28,8 @@ impl fmt::Display for Universe {
         Ok(())
     }
 }
+
+
 
 #[wasm_bindgen]
 #[repr(u8)]
@@ -100,7 +109,7 @@ impl Universe {
 
         let cells = (0..width * height)
             .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
+                if get_random_bool() == 1 {
                     Cell::Alive
                 } else {
                     Cell::Dead
