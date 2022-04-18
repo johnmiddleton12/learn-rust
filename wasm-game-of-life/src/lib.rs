@@ -123,16 +123,6 @@ impl Universe {
 
     }
 
-    pub fn clear(&mut self) {
-
-        self.cells = (0..self.width * self.height)
-            .map(|_i| {
-                Cell::Dead
-            })
-            .collect();
-
-    }
-
     pub fn render(&self) -> String {
         self.to_string()
     }
