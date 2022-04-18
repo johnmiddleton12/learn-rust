@@ -125,11 +125,21 @@ impl Universe {
 
     pub fn clear(&mut self) {
 
-        self.cells = (0..self.width * self.height)
-            .map(|_i| {
-                Cell::Dead
-            })
-            .collect();
+        let mut next = self.cells.clone();
+
+        for row in 0..self.height {
+            for col in 0..self.width {
+                let idx = self.get_index(row, col);
+                let cell = self.cells[idx];
+                let live_neighbors = self.live_neighbor_count(row, col);
+
+                let next_cell = Cell::Dead;
+
+                next[idx] = next_cell;
+            }
+        }
+
+        self.cells = next;
 
     }
 
