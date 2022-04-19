@@ -12,15 +12,58 @@ const ALIVE_COLOR = "#000000";
 
 const canvas = document.getElementById("game-of-life-canvas");
 
-let isPaused = false;
-document.getElementById("pause-button").onclick = function () {
-    isPaused = !isPaused;
-    document.getElementById("pause-button").innerText = isPaused ? "Resume" : "Pause";
+let animationId = null;
+const playPauseButton = document.getElementById("pause-button");
+const isPaused = () => {
+    return animationId === null;
 };
+const play = () => {
+    playPauseButton.textContent = "⏸";
+    renderLoop();
+};
+const pause = () => {
+    playPauseButton.textContent = "▶";
+    cancelAnimationFrame(animationId);
+    animationId = null;
+};
+playPauseButton.addEventListener("click", () => {
+    if (isPaused()) {
+        play();
+    } else {
+        pause();
+    }
+});
 
-document.getElementById("clear-button").onclick = function () {
+canvas.addEventListener("click", event => {
+    const boundingRect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
+
+    const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+    const canvasTop = (event.clientY - boundingRect.top) * scaleY;
+
+    const row = Math.min(Math.floor(canvasTop / (CELL_SIZE + 1)), height - 1);
+    const col = Math.min(Math.floor(canvasLeft / (CELL_SIZE + 1)), width - 1);
+
+    universe.toggle_cell(row, col);
+
+    drawGrid();
+    drawCells();
+});
+
+const clearButton = document.getElementById("clear-button");
+clearButton.addEventListener("click", () => {
     universe.clear();
-};
+    drawGrid();
+    drawCells();
+});
+
+const newButton = document.getElementById("new-button");
+newButton.addEventListener("click", () => {
+    universe.randomize();
+    drawGrid();
+    drawCells();
+});
 
 canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
@@ -28,15 +71,12 @@ canvas.width = (CELL_SIZE + 1) * width + 1;
 const ctx = canvas.getContext("2d");
 
 const renderLoop = () => {
-
-    if (!isPaused) {
-        universe.tick();
-    };
-
     drawGrid();
     drawCells();
 
-    requestAnimationFrame(renderLoop);
+    universe.tick();
+
+    animationId = requestAnimationFrame(renderLoop);
 };
 
 const drawGrid = () => {
