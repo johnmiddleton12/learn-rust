@@ -125,21 +125,9 @@ impl Universe {
 
     pub fn clear(&mut self) {
 
-        let mut next = self.cells.clone();
-
-        for row in 0..self.height {
-            for col in 0..self.width {
-                let idx = self.get_index(row, col);
-                let cell = self.cells[idx];
-                let live_neighbors = self.live_neighbor_count(row, col);
-
-                let next_cell = Cell::Dead;
-
-                next[idx] = next_cell;
-            }
-        }
-
-        self.cells = next;
+        self.cells = (0..self.width * self.height)
+            .map(|_i| Cell::Dead)
+            .collect();
 
     }
 
@@ -157,6 +145,16 @@ impl Universe {
 
     pub fn cells(&self) -> *const Cell {
         self.cells.as_ptr()
+    }
+
+    pub fn set_width(&mut self, width: u32) {
+        self.width = width;
+        self.cells = (0..width * self.height).map(|_i| Cell::Dead).collect();
+    }
+
+    pub fn set_height(&mut self, height: u32) {
+        self.height = height;
+        self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
     }
 
 }
