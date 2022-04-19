@@ -80,7 +80,7 @@ impl Universe {
                     (otherwise, _) => otherwise,
                 };
 
-                log!("        {:?} @ {:?} has {} live neighbors", cell, (row, col), live_neighbors);
+                //log!("        {:?} @ {:?} has {} live neighbors", cell, (row, col), live_neighbors);
 
                 next[idx] = next_cell;
             }
