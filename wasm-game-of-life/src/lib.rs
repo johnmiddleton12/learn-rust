@@ -68,6 +68,22 @@ impl Universe {
         self.cells[idx].toggle();
     }
 
+    pub fn add_glider(&mut self, row: u32, column: u32) {
+        let indexes: [usize; 5] = 
+            [
+                self.get_index(row, column - 1),
+                self.get_index(row + 1, column),
+                self.get_index(row + 1, column + 1),
+                self.get_index(row, column + 1),
+                self.get_index(row - 1, column + 1)
+            ];
+        for n in 0..5 {
+            if (indexes[n] as u32) < (self.height * self.width) {
+                self.cells[indexes[n]] = Cell::Alive;
+            }
+        }
+    }
+
     pub fn tick(&mut self) {
         let mut next = self.cells.clone();
 
