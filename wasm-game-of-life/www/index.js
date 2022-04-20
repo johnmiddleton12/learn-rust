@@ -71,6 +71,13 @@ newButton.addEventListener("click", () => {
     drawCells();
 });
 
+let ticksPerFrame = 1;
+const speedSlider = document.getElementById("speed-slider");
+speedSlider.addEventListener("input", () => {
+    ticksPerFrame = speedSlider.value;
+    document.getElementById("fps-display").textContent = 'FPS: ' + ticksPerFrame;
+});
+
 canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
 
@@ -80,7 +87,9 @@ const renderLoop = () => {
     drawGrid();
     drawCells();
 
-    universe.tick();
+    for (let i = 0; i < ticksPerFrame; i++) {
+        universe.tick();
+    }
 
     animationId = requestAnimationFrame(renderLoop);
 };
