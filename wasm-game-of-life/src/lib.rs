@@ -5,6 +5,9 @@ use wasm_bindgen::prelude::*;
 extern crate js_sys;
 extern crate web_sys;
 
+extern crate fixedbitset;
+use fixedbitset::FixedBitSet;
+
 macro_rules! log {
     ( $( $t:tt )* ) => {
         web_sys::console::log_1(&format!( $( $t )* ).into());
