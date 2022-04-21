@@ -29,7 +29,7 @@ impl fmt::Display for Universe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for line in self.cells.as_slice().chunks(self.width as usize) {
             for &cell in line {
-                let symbol = if cell == Cell::Dead { '◻' } else { '◼' };
+                let symbol = if cell == false { '◻' } else { '◼' };
                 write!(f, "{}", symbol)?;
             }
             write!(f, "\n")?;
@@ -159,20 +159,20 @@ impl Universe {
     }
 
     pub fn randomize(&mut self) {
-        for cell in self.cells.iter_mut() {
-            *cell = if get_random_bool() == 1 {
-                Cell::Alive
-            } else {
-                Cell::Dead
-            };
+    
+        let size = (self.width * self.height) as usize;
+        for i in 0..size {
+            self.cells.set(i, get_random_bool() == 1);
         }
+
     }
 
     pub fn clear(&mut self) {
-
-        self.cells = (0..self.width * self.height)
-            .map(|_i| Cell::Dead)
-            .collect();
+        
+        let size = (self.width * self.height) as usize;
+        for i in 0..size {
+            self.cells.set(i, false);
+        }
 
     }
 
@@ -194,26 +194,32 @@ impl Universe {
 
     pub fn set_width(&mut self, width: u32) {
         self.width = width;
-        self.cells = (0..width * self.height).map(|_i| Cell::Dead).collect();
+        let size = (width * self.height) as usize;
+        for i in 0..size {
+            self.cells.set(i, false);
+        }
     }
 
     pub fn set_height(&mut self, height: u32) {
         self.height = height;
-        self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
+        let size = (self.width * height) as usize;
+        for i in 0..size {
+            self.cells.set(i, false);
+        }
     }
 
 }
 
 impl Universe {
 
-    pub fn get_cells(&self) -> &[Cell] {
+    pub fn get_cells(&self) -> &FixedBitSet {
         &self.cells
     }
 
     pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
         for (row, col) in cells.iter().cloned() {
             let idx = self.get_index(row, col);
-            self.cells[idx] = Cell::Alive;
+            self.cells[idx] = true;
         }
     }
 
